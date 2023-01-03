@@ -167,7 +167,7 @@
                   <el-radio
                      v-for="type in channel_type"
                      :key="type.value"
-                     :label="type.value"
+                     :label="parseInt(type.value)"
                   >{{ type.label }}</el-radio>
                </el-radio-group>
             </el-form-item>
