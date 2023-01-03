@@ -21,5 +21,25 @@ public interface TienchinChannelMapper {
      */
     public List<TienchinChannel> selectTienchinChannelList(TienchinChannel tienchinChannel);
 
+    /**
+     * 根据渠道名称查询
+     * @param channelName
+     * @return
+     */
+    TienchinChannel selectTienchinChannelByName(String channelName);
 
+    /**
+     * 新增渠道
+     * @param channel
+     * @return
+     */
+    int addChannel(TienchinChannel channel);
+
+    TienchinChannel selectTienchinChannelById(Long channelId);
+    /**
+     * 修改渠道
+     * @param channel
+     * @return
+     */
+    int updateChannel(TienchinChannel channel);
 }

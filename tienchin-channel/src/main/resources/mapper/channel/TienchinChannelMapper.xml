@@ -21,6 +21,7 @@
     </sql>
 
 
+
     <select id="selectTienchinChannelList" parameterType="TienchinChannel" resultMap="TienchinChannelResult">
         <include refid="selectTienchinChannelVo"/>
         <where>
@@ -30,6 +31,51 @@
             and del_flag = 0
         </where>
     </select>
+    <select id="selectTienchinChannelByName" parameterType="java.lang.String" resultMap="TienchinChannelResult">
+        <include refid="selectTienchinChannelVo"/>
+        <where>
+            del_flag = 0
+            and channel_name = #{channelName}
+        </where>
+    </select>
 
+    <select id="selectTienchinChannelById" resultMap="TienchinChannelResult">
+        <include refid="selectTienchinChannelVo"/>
+        <where>
+            channel_id = #{channelId}
+            and del_flag = 0
+        </where>
+    </select>
+
+    <update id="updateChannel" parameterType="tienchinChannel">
+        update tienchin_channel
+        <set>
+            <if test="channelName != null and channelName != ''">channel_name = #{channelName},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="remark != null and remark != ''">remark = #{remark},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </set>
+        where channel_id = #{channelId}
+    </update>
+
+    <insert id="addChannel" parameterType="tienchinChannel">
+        insert into tienchin_channel(
+            <if test="channelName !=null and channelName != ''" >channel_name,</if>
+            <if test="status !=null and status != ''" >status,</if>
+            <if test="remark !=null and remark != ''" >remark,</if>
+            <if test="type !=null and type != ''" >type,</if>
+            <if test="createBy !=null and createBy != ''" >create_by,</if>
+            create_time
+        ) values (
+            <if test="channelName !=null and channelName != ''" >#{channelName},</if>
+            <if test="status !=null and status != ''" >#{status},</if>
+            <if test="remark !=null and remark != ''" >#{remark},</if>
+            <if test="type !=null and type != ''" >#{type},</if>
+            <if test="createBy !=null and createBy != ''" >#{createBy},</if>
+            sysdate()
+        )
+    </insert>
 
 </mapper>

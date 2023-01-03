@@ -21,5 +21,22 @@ public interface ITienchinChannelService {
      */
     public List<TienchinChannel> selectTienchinChannelList(TienchinChannel tienchinChannel);
 
-
+    /**
+     * 新增渠道管理
+     * @param channel
+     * @return
+     */
+    int addChannel(TienchinChannel channel);
+    /**
+     * 根据id查询渠道信息
+     * @param channelId
+     * @return
+     */
+    TienchinChannel selectTienchinChannelById(Long channelId);
+    /**
+     * 修改渠道
+     * @param channel
+     * @return
+     */
+    int updateChannel(TienchinChannel channel);
 }

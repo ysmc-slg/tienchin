@@ -5,6 +5,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import top.zxqs.tienchin.common.annotation.Excel;
 import top.zxqs.tienchin.common.core.domain.BaseEntity;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 /**
  * 渠道管理对象 tienchin_channel
  *
@@ -23,19 +27,24 @@ public class TienchinChannel extends BaseEntity {
      * 渠道名称
      */
     @Excel(name = "渠道名称")
+    @NotNull(message = "渠道名称不能为空")
     private String channelName;
 
     /**
      * 渠道状态 0启动 1停止
      */
     @Excel(name = "渠道状态 0启动 1停止")
+    @NotNull(message = "渠道状态不能为空")
     private String status;
 
     /**
      * 渠道类型 1线上渠道，2线下渠道
      */
     @Excel(name = "渠道类型 1线上渠道，2线下渠道")
-    private Long type;
+    @NotNull(message = "渠道状态不能为空")
+    @Max(value = 2,message = "渠道类型最大为2")
+    @Min(value = 1,message = "渠道类型最小为1")
+    private Integer type;
 
     /**
      * $column.columnComment
@@ -66,12 +75,12 @@ public class TienchinChannel extends BaseEntity {
         return status;
     }
 
-    public void setType(Long type) {
-        this.type = type;
+    public Integer getType() {
+        return type;
     }
 
-    public Long getType() {
-        return type;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public void setDelFlag(Integer delFlag) {
