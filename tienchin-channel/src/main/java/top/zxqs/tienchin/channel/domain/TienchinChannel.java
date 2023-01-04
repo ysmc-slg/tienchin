@@ -33,7 +33,7 @@ public class TienchinChannel extends BaseEntity {
     /**
      * 渠道状态 0启动 1停止
      */
-    @Excel(name = "渠道状态 0启动 1停止")
+    @Excel(name = "渠道状态",prompt="请选择",combo="正常,禁用",readConverterExp="0=正常,1=禁用")
     @NotNull(message = "渠道状态不能为空")
     private String status;
 

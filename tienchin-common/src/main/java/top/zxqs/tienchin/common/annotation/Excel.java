@@ -39,7 +39,7 @@ public @interface Excel {
     public String dictType() default "";
 
     /**
-     * 读取内容转表达式 (如: 0=男,1=女,2=未知)
+     * 读取内容转表达式 (如: 0=男,1=女,2=未知)，下载时会将数字转成字符，上传将字符转成数字
      */
     public String readConverterExp() default "";
 
@@ -84,7 +84,7 @@ public @interface Excel {
     public String prompt() default "";
 
     /**
-     * 设置只能选择不能输入的列内容.
+     * 设置只能选择不能输入的列内容.下拉框，格式为："xxx,xxx"
      */
     public String[] combo() default {};
 
