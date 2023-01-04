@@ -133,8 +133,9 @@ service.interceptors.response.use(res => {
 export function download(url, params, filename) {
   downloadLoadingInstance = ElLoading.service({ text: "正在下载数据，请稍候", background: "rgba(0, 0, 0, 0.7)", })
   return service.post(url, params, {
+    // 对参数进行处理，将参数转成乱码
     transformRequest: [(params) => { return tansParams(params) }],
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, 
     responseType: 'blob'
   }).then(async (data) => {
     const isLogin = await blobValidate(data);

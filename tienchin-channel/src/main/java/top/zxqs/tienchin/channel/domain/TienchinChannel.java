@@ -40,7 +40,7 @@ public class TienchinChannel extends BaseEntity {
     /**
      * 渠道类型 1线上渠道，2线下渠道
      */
-    @Excel(name = "渠道类型 1线上渠道，2线下渠道")
+    @Excel(name = "渠道类型 1线上渠道，2线下渠道",prompt="请选择",combo="线上渠道,线下渠道",readConverterExp="1=线上渠道,2=线下渠道")
     @NotNull(message = "渠道状态不能为空")
     @Max(value = 2,message = "渠道类型最大为2")
     @Min(value = 1,message = "渠道类型最小为1")

@@ -1,33 +1,24 @@
 <template>
    <div class="app-container">
       <el-form :model="queryParams" ref="queryRef" v-show="showSearch" :inline="true">
-         <el-form-item label="角色名称" prop="roleName">
+         <el-form-item label="渠道名称" prop="channelName">
             <el-input
-               v-model="queryParams.roleName"
-               placeholder="请输入角色名称"
+               v-model="queryParams.channelName"
+               placeholder="请输入渠道名称"
                clearable
                style="width: 240px"
                @keyup.enter="handleQuery"
             />
          </el-form-item>
-         <el-form-item label="权限字符" prop="roleKey">
-            <el-input
-               v-model="queryParams.roleKey"
-               placeholder="请输入权限字符"
-               clearable
-               style="width: 240px"
-               @keyup.enter="handleQuery"
-            />
-         </el-form-item>
-         <el-form-item label="状态" prop="status">
+         <el-form-item label="渠道类型" prop="type">
             <el-select
-               v-model="queryParams.status"
-               placeholder="角色状态"
+               v-model="queryParams.type"
+               placeholder="渠道类型"
                clearable
                style="width: 240px"
             >
                <el-option
-                  v-for="dict in sys_normal_disable"
+                  v-for="dict in channel_type"
                   :key="dict.value"
                   :label="dict.label"
                   :value="dict.value"
@@ -80,6 +71,16 @@
             >删除</el-button>
          </el-col>
          <el-col :span="1.5">
+        <el-button
+            type="info"
+            plain
+            icon="Upload"
+            @click="handleImport"
+            v-hasPermi="['tienchin:channel:import']"
+          >导入</el-button>
+        </el-col>
+            
+         <el-col :span="1.5">
             <el-button
                type="warning"
                plain
@@ -113,12 +114,12 @@
           </template>
          </el-table-column>
          <el-table-column label="创建人" prop="createBy" width="100" />
-         <el-table-column label="创建时间" prop="createTime" :show-overflow-tooltip="true" width="100" />
-         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" width="100" />
+         <el-table-column label="创建时间" prop="createTime" :show-overflow-tooltip="true" width="180" />
+         <el-table-column label="备注" prop="remark" :show-overflow-tooltip="true" width="180" />
          
          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template #default="scope">
-              <el-tooltip content="修改" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="修改" placement="top">
                 <el-button
                   type="text"
                   icon="Edit"
@@ -126,7 +127,7 @@
                   v-hasPermi="['tienchin:channel:edit']"
                 ></el-button>
               </el-tooltip>
-              <el-tooltip content="删除" placement="top" v-if="scope.row.roleId !== 1">
+              <el-tooltip content="删除" placement="top">
                 <el-button
                   type="text"
                   icon="Delete"
@@ -183,13 +184,46 @@
          </template>
       </el-dialog>
 
+      <!-- 渠道导入对话框 -->
+      <el-dialog :title="upload.title" v-model="upload.open" width="400px" append-to-body>
+         <el-upload
+            ref="uploadRef"
+            :limit="1"
+            accept=".xlsx, .xls"
+            :headers="upload.headers"
+            :action="upload.url + '?updateSupport=' + upload.updateSupport"
+            :disabled="upload.isUploading"
+            :on-progress="handleFileUploadProgress"
+            :on-success="handleFileSuccess"
+            :auto-upload="false"
+            drag
+         >
+            <el-icon class="el-icon--upload"><upload-filled /></el-icon>
+            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+            <template #tip>
+               <div class="el-upload__tip text-center">
+                  <div class="el-upload__tip">
+                     <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的用户数据
+                  </div>
+                  <span>仅允许导入xls、xlsx格式文件。</span>
+                  <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;" @click="importTemplate">下载模板</el-link>
+               </div>
+            </template>
+         </el-upload>
+         <template #footer>
+            <div class="dialog-footer">
+               <el-button type="primary" @click="submitFileForm">确 定</el-button>
+               <el-button @click="upload.open = false">取 消</el-button>
+            </div>
+         </template>
+      </el-dialog>
+
    </div>
 </template>
 
 <script setup name="Role">
-import { addRole, changeRoleStatus, dataScope, delRole, getRole, listRole, updateRole, deptTreeSelect } from "@/api/system/role";
-import {listChannel,addChannel,getChannel,updateChannel} from "@/api/tienchin/channel/channel";
-
+import {listChannel,addChannel,getChannel,updateChannel,delChannel} from "@/api/tienchin/channel/channel";
+import { getToken } from "@/utils/auth";
 const router = useRouter();
 const { proxy } = getCurrentInstance();
 const { sys_normal_disable,channel_type,channel_status } = proxy.useDict("sys_normal_disable","channel_type","channel_status");
@@ -204,28 +238,31 @@ const multiple = ref(true);
 const total = ref(0);
 const title = ref("");
 const dateRange = ref([]);
-const deptOptions = ref([]);
-const openDataScope = ref(false);
 const menuRef = ref(null);
-const deptRef = ref(null);
 
-/** 数据范围选项*/
-const dataScopeOptions = ref([
-  { value: "1", label: "全部数据权限" },
-  { value: "2", label: "自定数据权限" },
-  { value: "3", label: "本部门数据权限" },
-  { value: "4", label: "本部门及以下数据权限" },
-  { value: "5", label: "仅本人数据权限" }
-]);
+/*** 用户导入参数 */
+const upload = reactive({
+  // 是否显示弹出层（用户导入）
+  open: false,
+  // 弹出层标题（用户导入）
+  title: "",
+  // 是否禁用上传
+  isUploading: false,
+  // 是否更新已经存在的用户数据
+  updateSupport: 0,
+  // 设置上传的请求头部
+  headers: { Authorization: "Bearer " + getToken() },
+  // 上传的地址
+  url: import.meta.env.VITE_APP_BASE_API + "/tienchin/channel/importData"
+});
 
 const data = reactive({
   form: {},
   queryParams: {
     pageNum: 1,
     pageSize: 10,
-    roleName: undefined,
-    roleKey: undefined,
-    status: undefined
+    channelName: undefined,
+    type: undefined
   },
   rules: {
     channelName: [{ required: true, message: "渠道名称不能为空", trigger: "blur" }],
@@ -239,6 +276,7 @@ const { queryParams, form, rules } = toRefs(data);
 /** 查询渠道列表 */
 function getList() {
   loading.value = true;
+  console.log(queryParams.value)
   listChannel(proxy.addDateRange(queryParams.value, dateRange.value)).then(response => {
     channelList.value = response.rows;
     total.value = response.total;
@@ -250,6 +288,13 @@ function handleQuery() {
   queryParams.value.pageNum = 1;
   getList();
 }
+
+/** 导入按钮操作 */
+function handleImport() {
+  upload.title = "渠道导入";
+  upload.open = true;
+};
+
 /** 重置按钮操作 */
 function resetQuery() {
   dateRange.value = [];
@@ -258,36 +303,46 @@ function resetQuery() {
 }
 /** 删除按钮操作 */
 function handleDelete(row) {
-  const roleIds = row.roleId || ids.value;
-  proxy.$modal.confirm('是否确认删除角色编号为"' + roleIds + '"的数据项?').then(function () {
-    return delRole(roleIds);
+  const channelIds = row.channelId || ids.value;
+  proxy.$modal.confirm('是否确认删除编号为"' + channelIds + '"的数据项?').then(function () {
+    return delChannel(channelIds);
   }).then(() => {
     getList();
     proxy.$modal.msgSuccess("删除成功");
   }).catch(() => {});
 }
+/** 下载模板操作 */
+function importTemplate() {
+  proxy.download("/tienchin/channel/importTemplate", {
+  }, `channel_template_${new Date().getTime()}.xlsx`);
+};
+/**文件上传中处理 */
+const handleFileUploadProgress = (event, file, fileList) => {
+  upload.isUploading = true;
+};
+/** 文件上传成功处理 */
+const handleFileSuccess = (response, file, fileList) => {
+  upload.open = false;
+  upload.isUploading = false;
+  proxy.$refs["uploadRef"].handleRemove(file);
+  proxy.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true });
+  getList();
+};
+/** 提交上传文件 */
+function submitFileForm() {
+  proxy.$refs["uploadRef"].submit();
+};
 /** 导出按钮操作 */
 function handleExport() {
-  proxy.download("system/role/export", {
+  proxy.download("/tienchin/channel/export", {
     ...queryParams.value,
-  }, `role_${new Date().getTime()}.xlsx`);
+  }, `channel_${new Date().getTime()}.xlsx`);
 }
 /** 多选框选中数据 */
 function handleSelectionChange(selection) {
   ids.value = selection.map(item => item.channelId);
   single.value = selection.length != 1;
   multiple.value = !selection.length;
-}
-/** 角色状态修改 */
-function handleStatusChange(row) {
-  let text = row.status === "0" ? "启用" : "停用";
-  proxy.$modal.confirm('确认要"' + text + '""' + row.roleName + '"角色吗?').then(function () {
-    return changeRoleStatus(row.roleId, row.status);
-  }).then(() => {
-    proxy.$modal.msgSuccess(text + "成功");
-  }).catch(function () {
-    row.status = row.status === "0" ? "1" : "0";
-  });
 }
 
 
@@ -358,18 +413,6 @@ function submitForm() {
 /** 取消按钮 */
 function cancel() {
   open.value = false;
-  reset();
-}
-/** 选择角色权限范围触发 */
-function dataScopeSelectChange(value) {
-  if (value !== "2") {
-    deptRef.value.setCheckedKeys([]);
-  }
-}
-
-/** 取消按钮（数据权限）*/
-function cancelDataScope() {
-  openDataScope.value = false;
   reset();
 }
 

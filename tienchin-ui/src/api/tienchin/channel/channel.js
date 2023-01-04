@@ -30,8 +30,15 @@ export function getChannel(channelId) {
 export function updateChannel(data) {
   return request({
     url: '/tienchin/channel/updateChannel',
-    method: 'post',
+    method: 'put',
     data: data
+  })
+}
+// 删除
+export function delChannel(channelIds) {
+  return request({
+    url: '/tienchin/channel/removeChannel/'+ channelIds,
+    method: 'delete',
   })
 }
 

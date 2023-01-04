@@ -75,4 +75,30 @@ public class TienchinChannelServiceImpl implements ITienchinChannelService {
         return tienchinChannelMapper.updateChannel(channel);
     }
 
+    /**
+     * 根据id删除
+     * @param channelIds
+     * @return
+     */
+    @Override
+    public void removeChannel(Long[] channelIds) {
+        for(Long channelId : channelIds){
+            tienchinChannelMapper.removeChannel(channelId);
+        }
+    }
+    /**
+     * 上传Excel文件
+     * @param file
+     * @param updateSupport
+     * @return
+     * @throws Exception
+     */
+    @Override
+    public String importUser(List<TienchinChannel> userList, boolean updateSupport, String operName) {
+        for(TienchinChannel channel: userList){
+            int i = this.addChannel(channel);
+        }
+        return "成功呢";
+    }
+
 }

@@ -42,4 +42,10 @@ public interface TienchinChannelMapper {
      * @return
      */
     int updateChannel(TienchinChannel channel);
+    /**
+     * 根据id删除
+     * @param channelId
+     * @return
+     */
+    void removeChannel(Long channelId);
 }

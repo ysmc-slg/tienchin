@@ -79,7 +79,7 @@ public @interface Excel {
     public String defaultValue() default "";
 
     /**
-     * 提示信息
+     * 鼠标放上去的提示信息
      */
     public String prompt() default "";
 

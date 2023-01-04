@@ -28,6 +28,12 @@
             <if test="channelName != null  and channelName != ''"> and channel_name like concat('%', #{channelName}, '%')</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="type != null "> and type = #{type}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                and date_format(create_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                and date_format(create_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
             and del_flag = 0
         </where>
     </select>
@@ -77,5 +83,9 @@
             sysdate()
         )
     </insert>
+
+    <delete id="removeChannel" parameterType="java.lang.Long">
+        update tienchin_channel set del_flag = 1 where channel_id = #{channelId}
+    </delete>
 
 </mapper>

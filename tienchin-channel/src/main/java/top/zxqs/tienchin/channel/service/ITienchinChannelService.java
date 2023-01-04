@@ -39,4 +39,19 @@ public interface ITienchinChannelService {
      * @return
      */
     int updateChannel(TienchinChannel channel);
+    /**
+     * 根据id删除
+     * @param channelIds
+     * @return
+     */
+    void removeChannel(Long[] channelIds);
+
+    /**
+     *
+     * @param userList
+     * @param updateSupport
+     * @param operName
+     * @return
+     */
+    String importUser(List<TienchinChannel> userList, boolean updateSupport, String operName);
 }

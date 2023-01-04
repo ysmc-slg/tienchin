@@ -998,10 +998,12 @@ public class ExcelUtil<T> {
     public List<Object[]> getFields() {
         List<Object[]> fields = new ArrayList<Object[]>();
         List<Field> tempFields = new ArrayList<>();
+        // 获取父类的所有成员变量
         tempFields.addAll(Arrays.asList(clazz.getSuperclass().getDeclaredFields()));
+        // 获取自己所有的成员变量
         tempFields.addAll(Arrays.asList(clazz.getDeclaredFields()));
         for (Field field : tempFields) {
-            // 单注解
+            // 单注解，判断成员变量上是否有 Excel 注解
             if (field.isAnnotationPresent(Excel.class)) {
                 Excel attr = field.getAnnotation(Excel.class);
                 if (attr != null && (attr.type() == Type.ALL || attr.type() == type)) {
