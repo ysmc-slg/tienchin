@@ -48,10 +48,10 @@ public interface ITienchinChannelService {
 
     /**
      *
-     * @param userList
+     * @param channelList
      * @param updateSupport
      * @param operName
      * @return
      */
-    String importUser(List<TienchinChannel> userList, boolean updateSupport, String operName);
+    String importChannel(List<TienchinChannel> channelList, boolean updateSupport, String operName);
 }

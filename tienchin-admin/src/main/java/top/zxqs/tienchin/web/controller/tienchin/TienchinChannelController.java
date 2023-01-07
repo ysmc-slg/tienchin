@@ -117,9 +117,9 @@ public class TienchinChannelController extends BaseController {
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
         ExcelUtil<TienchinChannel> util = new ExcelUtil<TienchinChannel>(TienchinChannel.class);
-        List<TienchinChannel> userList = util.importExcel(file.getInputStream());
+        List<TienchinChannel> channelList = util.importExcel(file.getInputStream());
         String operName = getUsername();
-        String message = channelService.importUser(userList, updateSupport, operName);
+        String message = channelService.importChannel(channelList, updateSupport, operName);
         return AjaxResult.success(message);
     }
 

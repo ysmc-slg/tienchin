@@ -7,6 +7,7 @@ import top.zxqs.tienchin.common.core.domain.BaseEntity;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -27,21 +28,23 @@ public class TienchinChannel extends BaseEntity {
      * 渠道名称
      */
     @Excel(name = "渠道名称")
-    @NotNull(message = "渠道名称不能为空")
+    @NotEmpty(message = "渠道名称不能为空")
     private String channelName;
 
     /**
      * 渠道状态 0启动 1停止
      */
-    @Excel(name = "渠道状态",prompt="请选择",combo="正常,禁用",readConverterExp="0=正常,1=禁用")
+    @Excel(name = "渠道状态",prompt="请选择",combo="正常,禁用",readConverterExp="0=禁用,1=正常")
     @NotNull(message = "渠道状态不能为空")
+    @Max(value = 1,message = "渠道状态最大为1")
+    @Min(value = 0,message = "渠道状态最小为0")
     private String status;
 
     /**
      * 渠道类型 1线上渠道，2线下渠道
      */
-    @Excel(name = "渠道类型 1线上渠道，2线下渠道",prompt="请选择",combo="线上渠道,线下渠道",readConverterExp="1=线上渠道,2=线下渠道")
-    @NotNull(message = "渠道状态不能为空")
+    @Excel(name = "渠道类型",prompt="请选择",combo="线上渠道,线下渠道",readConverterExp="1=线上渠道,2=线下渠道")
+    @NotNull(message = "渠道类型不能为空")
     @Max(value = 2,message = "渠道类型最大为2")
     @Min(value = 1,message = "渠道类型最小为1")
     private Integer type;
