@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zxqs.tienchin.promotion.mapper.TienchinPromotionMapper">
+
+<!--    <resultMap type="TienchinPromotion" id="TienchinPromotionResult">-->
+<!--        <result property="promotionId"    column="promotion_id"    />-->
+<!--        <result property="name"    column="name"    />-->
+<!--        <result property="channelId"    column="channel_id"    />-->
+<!--        <result property="info"    column="info"    />-->
+<!--        <result property="type"    column="type"    />-->
+<!--        <result property="discount"    column="discount"    />-->
+<!--        <result property="voucher"    column="voucher"    />-->
+<!--        <result property="status"    column="status"    />-->
+<!--        <result property="beginTime"    column="begin_time"    />-->
+<!--        <result property="endTime"    column="end_time"    />-->
+<!--        <result property="remark"    column="remark"    />-->
+<!--        <result property="delFlag"    column="del_flag"    />-->
+<!--        <result property="createTime"    column="create_time"    />-->
+<!--        <result property="createBy"    column="create_by"    />-->
+<!--        <result property="updateTime"    column="update_time"    />-->
+<!--        <result property="updateBy"    column="update_by"    />-->
+<!--    </resultMap>-->
+
+    <sql id="selectTienchinPromotionVo">
+        select promotion_id, name, channel_id, info, type, discount, voucher, status, begin_time, end_time, remark, del_flag, create_time, create_by, update_time, update_by from tienchin_promotion
+    </sql>
+
+    <sql id="selectChinnelAndPromotionVo">
+        select tp.promotion_id, tp.name, tp.channel_id, tp.info, tp.type, tp.discount, tp.voucher, tp.status, tp.begin_time, tp.end_time, tp.remark, tp.del_flag, tp.create_time, tp.create_by, tp.update_time, tp.update_by,
+        tc.channel_id,tc.channel_name
+        from tienchin_promotion tp,tienchin_channel tc
+        WHERE tp.channel_id = tc.channel_id and tp.del_flag =0 and tc.del_flag = 0
+    </sql>
+
+
+    <select id="selectTienchinPromotionList" parameterType="Long" resultType="tienchinPromotion">
+        <include refid="selectChinnelAndPromotionVo"/>
+    </select>
+
+</mapper>

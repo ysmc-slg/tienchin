@@ -121,7 +121,7 @@ service.interceptors.response.use(res => {
       message = "系统接口" + message.substr(message.length - 3) + "异常";
     }
     ElMessage({
-      message: message,
+      message: message, 
       type: 'error',
       duration: 5 * 1000
     })
@@ -150,7 +150,6 @@ export function download(url, params, filename) {
     }
     downloadLoadingInstance.close();
   }).catch((r) => {
-    console.error(r)
     ElMessage.error('下载文件出现错误，请联系管理员！')
     downloadLoadingInstance.close();
   })

@@ -200,6 +200,12 @@
                 <artifactId>tienchin-channel</artifactId>
                 <version>${tienchin.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>top.zxqs</groupId>
+                <artifactId>tienchin-promotion</artifactId>
+                <version>${tienchin.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -211,6 +217,7 @@
         <module>tienchin-generator</module>
         <module>tienchin-common</module>
         <module>tienchin-channel</module>
+        <module>tienchin-promotion</module>
     </modules>
     <packaging>pom</packaging>
 

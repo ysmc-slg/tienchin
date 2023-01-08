@@ -71,6 +71,12 @@
             <groupId>top.zxqs</groupId>
             <artifactId>tienchin-channel</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>top.zxqs</groupId>
+            <artifactId>tienchin-promotion</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
