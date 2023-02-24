@@ -23,6 +23,7 @@ import top.zxqs.tienchin.common.utils.ServletUtils;
 import top.zxqs.tienchin.common.utils.ip.IpUtils;
 import top.zxqs.tienchin.framework.manager.AsyncManager;
 import top.zxqs.tienchin.framework.manager.factory.AsyncFactory;
+import top.zxqs.tienchin.framework.security.token.SmsAuthenticationToken;
 import top.zxqs.tienchin.system.service.ISysConfigService;
 import top.zxqs.tienchin.system.service.ISysUserService;
 
@@ -57,19 +58,30 @@ public class SysLoginService {
      * @param uuid     唯一标识
      * @return 结果
      */
-    public String login(String username, String password, String code, String uuid) {
-        boolean captchaOnOff = configService.selectCaptchaOnOff();
-        // 验证码开关
-        if (captchaOnOff) {
-            validateCaptcha(username, code, uuid);
-        }
+    public String login(String username, String password, String code, String uuid,String phoneNumber,String shortMsgCode,String authTypeParameter) {
+
         // 用户验证
         Authentication authentication = null;
         try {
-            // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
-            // 这句话其实就是去执行登录
-            authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            // 登录方式为短信验证码
+            if(Constants.PHONE_SHORT_MSG.equals(authTypeParameter)){
+                authentication = authenticationManager
+                        .authenticate(new SmsAuthenticationToken(phoneNumber,shortMsgCode));
+            } else {
+                // 登录方式为用户名/密码
+
+                boolean captchaOnOff = configService.selectCaptchaOnOff();
+                // 验证码开关
+                if (captchaOnOff) {
+                    validateCaptcha(username, code, uuid);
+                }
+
+                // 该方法会去调用UserDetailsServiceImpl.loadUserByUsername
+                // 这句话其实就是去执行登录
+                authentication = authenticationManager
+                        .authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            }
+
         } catch (Exception e) {
             if (e instanceof BadCredentialsException) {
                 AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_FAIL, MessageUtils.message("user.password.not.match")));
