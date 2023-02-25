@@ -203,4 +203,11 @@ public interface ISysUserService {
      * @return 结果
      */
     public String importUser(List<SysUser> userList, Boolean isUpdateSupport, String operName);
+
+    /**
+     * 根据手机号查询用户
+     * @param mobile
+     * @return
+     */
+    SysUser selectUserByphoneNumber(String mobile);
 }

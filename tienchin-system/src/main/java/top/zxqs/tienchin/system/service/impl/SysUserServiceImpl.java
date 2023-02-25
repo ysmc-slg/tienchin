@@ -514,4 +514,10 @@ public class SysUserServiceImpl implements ISysUserService {
 //        }
 //        return successMsg.toString();
     }
+
+    @Override
+    public SysUser selectUserByphoneNumber(String mobile) {
+
+        return userMapper.selectUserByphoneNumber(mobile);
+    }
 }

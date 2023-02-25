@@ -22,9 +22,50 @@ public class LoginBody {
     private String code;
 
     /**
+     * 手机号
+     */
+    private String phoneNumber;
+
+    /**
+     * 短信验证码
+     */
+    private String shortMsgCode;
+
+    /**
+     * 登录方式:
+     * 用户名密码登录为 username_password
+     * 短信验证码登录为：phone_short_msg
+     */
+    private String authTypeParameter;
+    /**
      * 唯一标识
      */
     private String uuid;
+
+
+    public String getAuthTypeParameter() {
+        return authTypeParameter;
+    }
+
+    public void setAuthTypeParameter(String authTypeParameter) {
+        this.authTypeParameter = authTypeParameter;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getShortMsgCode() {
+        return shortMsgCode;
+    }
+
+    public void setShortMsgCode(String shortMsgCode) {
+        this.shortMsgCode = shortMsgCode;
+    }
 
     public String getUsername() {
         return username;
