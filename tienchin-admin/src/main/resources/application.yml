@@ -15,8 +15,8 @@ tienchin:
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
   aliyun:
-    accessKeyId: LTAI4GJt8g2md8cREUV21rCx
-    accessKeySecret: h0j3ky5CnM97ehSPY5dpl9yss5odtP
+    accessKeyId: xxx
+    accessKeySecret: xxx
 
 # 开发环境配置
 server:
