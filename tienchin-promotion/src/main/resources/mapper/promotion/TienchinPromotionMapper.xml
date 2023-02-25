@@ -34,6 +34,40 @@
         WHERE tp.channel_id = tc.channel_id and tp.del_flag =0 and tc.del_flag = 0
     </sql>
 
+    <insert id="insertPromotion">
+        insert into tienchin_promotion (
+            <if test="name != null and name != ''" >name,</if>
+            <if test="channelId != null and channelId != ''" >channel_id,</if>
+            <if test="info != null and info != ''" >info,</if>
+            <if test="type != null and type != ''" >type,</if>
+            <if test="discount != null and discount != ''" >discount,</if>
+            <if test="voucher != null and voucher != ''" >voucher,</if>
+            <if test="status != null and status != ''" >status,</if>
+            <if test="beginTime != null and beginTime != ''" >begin_time,</if>
+            <if test="endTime != null and endTime != ''" >end_time,</if>
+            <if test="remark !=null and remark != ''" >remark,</if>
+            <if test="createBy !=null and createBy != ''" >create_by,</if>
+            create_time
+        ) values (
+            <if test="name !=null and name != ''" >#{name},</if>
+            <if test="channelId !=null and channelId != ''" >#{channelId},</if>
+            <if test="info !=null and info != ''" >#{info},</if>
+            <if test="type !=null and type != ''" >#{type},</if>
+            <if test="discount !=null and discount != ''" >#{discount},</if>
+            <if test="voucher !=null and voucher != ''" >#{voucher},</if>
+            <if test="status !=null and status != ''" >#{status},</if>
+            <if test="beginTime !=null and beginTime != ''" >#{beginTime},</if>
+            <if test="endTime !=null and endTime != ''" >#{name},</if>
+            <if test="remark !=null and remark != ''" >#{remark},</if>
+            <if test="createBy !=null and createBy != ''" >#{createBy},</if>
+            SYSDATE()
+        )
+    </insert>
+
+    <update id="updatePromotionByEndTime">
+        update tienchin_promotion set status = 0 where status = 1 and end_time <![CDATA[<]]> now()
+    </update>
+
 
     <select id="selectTienchinPromotionList" parameterType="Long" resultType="tienchinPromotion">
         <include refid="selectChinnelAndPromotionVo"/>

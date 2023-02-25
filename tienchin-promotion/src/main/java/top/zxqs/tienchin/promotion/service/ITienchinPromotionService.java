@@ -21,5 +21,10 @@ public interface ITienchinPromotionService {
      */
     public List<TienchinPromotion> selectTienchinPromotionList(TienchinPromotion tienchinPromotion);
 
-
+    /**
+     * 添加促销活动
+     * @param promotion
+     * @return
+     */
+    int insertPromotion(TienchinPromotion promotion);
 }

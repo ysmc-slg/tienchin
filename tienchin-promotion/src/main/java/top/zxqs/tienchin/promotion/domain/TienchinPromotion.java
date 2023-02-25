@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import top.zxqs.tienchin.common.annotation.Excel;
 import top.zxqs.tienchin.common.core.domain.BaseEntity;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 /**
@@ -24,12 +28,14 @@ public class TienchinPromotion extends BaseEntity {
      * 活动名称
      */
     @Excel(name = "活动名称")
+    @NotNull(message = "活动名称不能为空")
     private String name;
 
     /**
      * 渠道ID
      */
     @Excel(name = "渠道ID")
+    @NotNull(message = "请选择渠道id")
     private Long channelId;
 
     @Excel(name = "渠道名称")
@@ -38,12 +44,17 @@ public class TienchinPromotion extends BaseEntity {
     /**
      * 活动简介
      */
+    @NotNull(message = "活动简介不能为空")
+    @Size(min = 0,max = 255,message = "活动简介最多255个字符")
     @Excel(name = "活动简介")
     private String info;
 
     /**
      * 活动类型 1 折扣券，2 代金券
      */
+    @NotNull(message = "活动类型不能为空")
+    @Max(value = 10,message = "折扣券值无效")
+    @Min(value = 0,message = "折扣券值无效")
     @Excel(name = "活动类型 1 折扣券，2 代金券")
     private Integer type;
 
@@ -57,18 +68,22 @@ public class TienchinPromotion extends BaseEntity {
      * 代金券
      */
     @Excel(name = "代金券")
+    @Min(value = 0,message = "代金券无效")
     private Double voucher;
 
     /**
-     * 活动状态 0 禁用，1正常
+     * 活动状态 0 过期，1正常
      */
-    @Excel(name = "活动状态 0 禁用，1正常")
+    @Excel(name = "活动状态 0 过期，1正常")
+    @Max(value = 1,message = "活动状态无效")
+    @Min(value = 0,message = "活动状态无效")
     private Integer status;
 
     /**
      * 活动开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @NotNull(message = "活动开始时间不能为空")
     @Excel(name = "活动开始时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date beginTime;
 
@@ -76,6 +91,7 @@ public class TienchinPromotion extends BaseEntity {
      * 活动结束时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
+    @NotNull(message = "活动结束时间不能为空")
     @Excel(name = "活动结束时间", width = 30, dateFormat = "yyyy-MM-dd hh:mm:ss")
     private Date endTime;
 

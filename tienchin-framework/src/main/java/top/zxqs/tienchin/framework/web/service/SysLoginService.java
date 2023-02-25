@@ -16,10 +16,7 @@ import top.zxqs.tienchin.common.exception.ServiceException;
 import top.zxqs.tienchin.common.exception.user.CaptchaException;
 import top.zxqs.tienchin.common.exception.user.CaptchaExpireException;
 import top.zxqs.tienchin.common.exception.user.UserPasswordNotMatchException;
-import top.zxqs.tienchin.common.utils.DateUtils;
-import top.zxqs.tienchin.common.utils.MessageUtils;
-import top.zxqs.tienchin.common.utils.StringUtils;
-import top.zxqs.tienchin.common.utils.ServletUtils;
+import top.zxqs.tienchin.common.utils.*;
 import top.zxqs.tienchin.common.utils.ip.IpUtils;
 import top.zxqs.tienchin.framework.manager.AsyncManager;
 import top.zxqs.tienchin.framework.manager.factory.AsyncFactory;
@@ -79,6 +76,7 @@ public class SysLoginService {
                 throw new ServiceException(e.getMessage());
             }
         }
+
         // 记录登录信息
         AsyncManager.me().execute(AsyncFactory.recordLogininfor(username, Constants.LOGIN_SUCCESS, MessageUtils.message("user.login.success")));
         LoginUser loginUser = (LoginUser) authentication.getPrincipal();

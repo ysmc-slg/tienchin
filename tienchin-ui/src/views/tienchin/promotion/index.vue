@@ -93,7 +93,7 @@
       </el-row>
 
       <!-- 表格数据 -->
-      <el-table v-loading="loading" :data="channelList" @selection-change="handleSelectionChange" style="width: 100%" :height="tableHeight">
+      <el-table v-loading="loading" :data="channelList" @selection-change="handleSelectionChange" style="width: 100%" >
          <el-table-column type="selection" width="55" align="center"  />
          <el-table-column label="活动编号" prop="promotionId"  v-if="false" />
          <el-table-column label="活动名称" prop="name" :show-overflow-tooltip="true"  />
@@ -459,22 +459,22 @@ function getTableHeight() {
     tableHeight.value = window.innerHeight - tableH;
     }
 }
-onMounted(()=>{
-    //挂载window.onresize事件(动态设置table高度)
-    let _this = this;
-    window.onresize = () => {
-      if (_this.resizeFlag) {
-        clearTimeout(_this.resizeFlag);
-      }
-      _this.resizeFlag = setTimeout(() => {
-        _this.getTableHeight();
-        _this.resizeFlag = null;
-      }, 100);
-    };
+// onMounted(()=>{
+//     //挂载window.onresize事件(动态设置table高度)
+//     let _this = this;
+//     window.onresize = () => {
+//       if (_this.resizeFlag) {
+//         clearTimeout(_this.resizeFlag);
+//       }
+//       _this.resizeFlag = setTimeout(() => {
+//         _this.getTableHeight();
+//         _this.resizeFlag = null;
+//       }, 100);
+//     };
 
-})
+// })
 
 
 getList();
-getTableHeight();
+// getTableHeight();
 </script>

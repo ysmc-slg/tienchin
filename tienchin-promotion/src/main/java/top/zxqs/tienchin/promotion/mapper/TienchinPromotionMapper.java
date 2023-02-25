@@ -2,6 +2,7 @@ package top.zxqs.tienchin.promotion.mapper;
 
 import top.zxqs.tienchin.promotion.domain.TienchinPromotion;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,5 +20,12 @@ public interface TienchinPromotionMapper {
      * @return
      */
     public List<TienchinPromotion> selectTienchinPromotionList(TienchinPromotion tienchinPromotion);
+    /**
+     * 判断当前活动是否过期
+     * @param endTime
+     * @return
+     */
+    int updatePromotionByEndTime(Date endTime);
 
+    int insertPromotion(TienchinPromotion promotion);
 }
