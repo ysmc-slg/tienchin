@@ -1,6 +1,7 @@
 package top.zxqs.tienchin.framework.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +18,9 @@ import org.springframework.web.filter.CorsFilter;
 import top.zxqs.tienchin.framework.security.filter.JwtAuthenticationTokenFilter;
 import top.zxqs.tienchin.framework.security.handle.AuthenticationEntryPointImpl;
 import top.zxqs.tienchin.framework.security.handle.LogoutSuccessHandlerImpl;
+import top.zxqs.tienchin.framework.security.token.SmsAuthenticationProvider;
+
+import javax.annotation.Resource;
 
 /**
  * spring security配置
@@ -40,15 +44,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * 自定义用户认证逻辑
      */
-    @Autowired
+    @Resource(name = "userDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
+//    @Autowired
+//    private ThirdAuthenticationFilter thirdAuthenticationFilter;
     /**
      * 认证失败处理类
      */
     @Autowired
     private AuthenticationEntryPointImpl unauthorizedHandler;
 
+    @Autowired
+    private SmsAuthenticationProvider smsAuthenticationProvider;
     /**
      * 退出处理类
      */
@@ -121,14 +129,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").anonymous()
                 .antMatchers("/*/api-docs").anonymous()
                 .antMatchers("/druid/**").anonymous()
+<<<<<<< HEAD
                 .antMatchers("/send/*").anonymous()
+=======
+                .antMatchers("/pipelineTest*").anonymous()
+>>>>>>> 27074f72fe967b18879672aca763dc37b51d21d9
                 // 除上面外的所有请求全部需要鉴权认证
                 .anyRequest().authenticated()
                 .and()
                 .headers().frameOptions().disable();
         httpSecurity.logout().logoutUrl("/logout").logoutSuccessHandler(logoutSuccessHandler);
+        //短信验证
+        httpSecurity.authenticationProvider(smsAuthenticationProvider);
         // 添加JWT filter
         httpSecurity.addFilterBefore(authenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterAfter(thirdAuthenticationFilter, JwtAuthenticationTokenFilter.class);
         // 添加CORS filter
         httpSecurity.addFilterBefore(corsFilter, JwtAuthenticationTokenFilter.class);
         httpSecurity.addFilterBefore(corsFilter, LogoutFilter.class);
