@@ -14,9 +14,8 @@ tienchin:
   addressEnabled: false
   # 验证码类型 math 数组计算 char 字符验证
   captchaType: math
-  aliyun:
-    accessKeyId: xxx
-    accessKeySecret: xxx
+  aliyunAccessKeyId: LTAI4GJt8g2md8cREUV21rCx
+  aliyunAccessKeySecret: h0j3ky5CnM97ehSPY5dpl9yss5odtP
 
 # 开发环境配置
 server:
@@ -35,7 +34,6 @@ server:
       max: 800
       # Tomcat启动初始化的线程数，默认值10
       min-spare: 100
-
 # 日志配置
 logging:
   level:
@@ -84,6 +82,16 @@ spring:
         max-active: 8
         # #连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1ms
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    password: guest
+    username: guest
+    listener:
+      simple:
+        acknowledge-mode: manual
+    publisher-confirm-type: correlated
+    publisher-returns: true
 
 # token配置
 token:

@@ -1,5 +1,6 @@
 package top.zxqs.tienchin.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -45,6 +46,28 @@ public class TienChinConfig {
      * 验证码类型
      */
     private static String captchaType;
+
+
+    private static String aliyunAccessKeyId;
+
+
+    private static String aliyunAccessKeySecret;
+
+    public static String getAliyunAccessKeyId() {
+        return aliyunAccessKeyId;
+    }
+
+    public void setAliyunAccessKeyId(String aliyunAccessKeyId) {
+        TienChinConfig.aliyunAccessKeyId = aliyunAccessKeyId;
+    }
+
+    public static String getAliyunAccessKeySecret() {
+        return aliyunAccessKeySecret;
+    }
+
+    public void setAliyunAccessKeySecret(String aliyunAccessKeySecret) {
+        TienChinConfig.aliyunAccessKeySecret = aliyunAccessKeySecret;
+    }
 
     public String getName() {
         return name;

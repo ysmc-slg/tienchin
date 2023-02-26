@@ -32,23 +32,21 @@ public class LoginBody {
     private String shortMsgCode;
 
     /**
-     * 登录方式:
-     * 用户名密码登录为 username_password
-     * 短信验证码登录为：phone_short_msg
+     * 登录方式
      */
-    private String authTypeParameter;
+    private String loginType;
     /**
      * 唯一标识
      */
     private String uuid;
 
 
-    public String getAuthTypeParameter() {
-        return authTypeParameter;
+    public String getLoginType() {
+        return loginType;
     }
 
-    public void setAuthTypeParameter(String authTypeParameter) {
-        this.authTypeParameter = authTypeParameter;
+    public void setLoginType(String loginType) {
+        this.loginType = loginType;
     }
 
     public String getPhoneNumber() {

@@ -1,12 +1,15 @@
 import request from '@/utils/request'
 
 // 登录方法
-export function login(username, password, code, uuid) {
+export function login(username, password, code, uuid,phoneNumber,shortMsgCode,loginType) {
   const data = {
     username,
     password,
     code,
-    uuid
+    uuid,
+    phoneNumber,
+    shortMsgCode,
+    loginType
   }
   return request({
     url: '/login',
@@ -50,6 +53,18 @@ export function logout() {
 export function getCodeImg() {
   return request({
     url: '/captchaImage',
+    headers: {
+      isToken: false
+    },
+    method: 'get',
+    timeout: 20000
+  })
+}
+
+// 获取短信验证码
+export function getSmsCode(phoneNumber) {
+  return request({
+    url: '/send/'+phoneNumber,
     headers: {
       isToken: false
     },

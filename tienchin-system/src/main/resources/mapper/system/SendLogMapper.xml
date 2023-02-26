@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.zxqs.tienchin.system.mapper.SendLogMapper">
+
+    <insert id="insertSendLog">
+         insert into send_log (msg_id,name,route_key,exchange,try_time,create_time,count,message) values (#{msgId},#{name},#{routeKey},#{exchange},#{tryTime},#{createTime},#{count},#{message})
+    </insert>
+
+    <update id="updateSendLogStatusByMsgId">
+        update send_log set status = '1',update_time = sysdate() where msg_id = #{msgId}
+    </update>
+</mapper>
